@@ -1,0 +1,112 @@
+// команда для первого запуска контейнера 
+docker-compose up --build 
+// команда для последующего запуска docker-compose 
+docker-compose up
+
+// установка sequelize с доп библиотеками ( драйвер PostgreSQL (pg), и дополнительный модуль (pg-hstore), который используется для хранения данных в формате hstore.)
+npm install sequelize pg pg-hstore
+
+//дополнительный пакет Sequelize CLI, который предоставляет команды для создания и выполнения миграций.
+npm install sequelize-cli
+
+// создание миграции для модели
+npx sequelize-cli migration:generate --name <имя_миграции>
+
+// запускает файлы миграции для того чтобы они появились в db
+npx sequelize-cli db:migrate
+
+// для создания файла seed
+npx sequelize-cli seed:generate --name <SeederName>
+
+
+// для запуска seed
+npx sequelize-cli db:seed --seed <seed-file-name>
+
+
+
+запуск на серваке
+
+NODE_ENV=production npx sequelize db:migrate
+
+NODE_ENV=production npx sequelize db:seed:all
+
+
+Запуск daemon
+npm i pm2 -g
+
+pm2 start "npm run prod" --name hh.kz
+
+
+
+
+
+npx sequelize-cli db:migrate:undo:all
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed --seed 20250203064940-seedRole.js 
+mkdir uploads
+
+
+
+
+
+
+
+
+0           запускаем   ./backup.sh
+
+
+ 1  Проверка есть ли юзеры  docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c 'SELECT * FROM "Users" LIMIT 5;'
+2 Проверка списка таблиц   docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c '\dt'
+3 docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c 'SELECT count(*) FROM "Users";'
+
+
+3.5 Просмотр бэкапа gunzip -c backups/20250421_123144.sql.gz | less
+
+
+
+
+
+
+
+4 ./restore.sh
+
+docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c "
+DO \$\$ DECLARE r record; BEGIN
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+        EXECUTE 'TRUNCATE TABLE ' || quote_ident(r.tablename) || ' RESTART IDENTITY CASCADE;';
+    END LOOP;
+END \$\$;
+"
+
+
+
+
+                                                          docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c "DO \$\$ DECLARE r record; BEGIN FOR r IN (SELECT sequence_name FROM information_schema.sequences WHERE sequence_schema = 'public') LOOP EXECUTE 'ALTER SEQUENCE ' || quote_ident(r.sequence_name) || ' RESTART WITH 1;'; END LOOP; END \$\$;"
+ 0 Обязательно сбрасываем чтобы id начинался с еденицы    docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c "DO \$\$ DECLARE r record; BEGIN FOR r IN (SELECT sequence_name FROM information_schema.sequences WHERE sequence_schema = 'public') LOOP EXECUTE 'ALTER SEQUENCE ' || quote_ident(r.sequence_name) || ' RESTART WITH 1;'; END LOOP; END \$\$;"
+                                                          docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c "DO \$\$ DECLARE r record; BEGIN FOR r IN (SELECT sequence_name FROM information_schema.sequences WHERE sequence_schema = 'public') LOOP EXECUTE 'ALTER SEQUENCE ' || quote_ident(r.sequence_name) || ' RESTART WITH 1;'; END LOOP; END \$\$;"
+                                                          docker exec -it kazniisaLMS_db psql -U admin -d kazniisalms_db_restore -c "DO \$\$ DECLARE r record; BEGIN FOR r IN (SELECT sequence_name FROM information_schema.sequences WHERE sequence_schema = 'public') LOOP EXECUTE 'ALTER SEQUENCE ' || quote_ident(r.sequence_name) || ' RESTART WITH 1;'; END LOOP; END \$\$,"
+ 
+ 
+
+
+ 0.1.1     docker restart kazniisaLMS_db
+ 0.1   выключить включить докер                           docker exec kazniisaLMS_db psql -U admin -d postgres -c 'DROP DATABASE IF EXISTS admin;'
+ 1 удаление базы админ и переименование с бэкапа         docker exec kazniisaLMS_db psql -U admin -d postgres -c 'ALTER DATABASE kazniisalms_db_restore RENAME TO admin;'
+
+5. Все готово
+
+
+
+
+
+
+10 Ручное восстановление
+            # Удаление и создание временной базы
+            docker exec kazniisaLMS_db psql -U admin -d postgres -c 'DROP DATABASE IF EXISTS kazniisalms_db_restore;'
+            docker exec kazniisaLMS_db psql -U admin -d postgres -c 'CREATE DATABASE kazniisalms_db_restore;'
+
+            # Восстановление дампа
+            gunzip -c backups/20250421_120157.sql.gz | docker exec -i kazniisaLMS_db env PGPASSWORD=root psql -U admin -d kazniisalms_db_restore
+
+
+            

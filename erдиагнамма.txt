@@ -1,0 +1,92 @@
++----------------+       +----------------+       +----------------+
+|    Users       |       |    Courses     |       |    Materials   |
+|----------------|       |----------------|       |----------------|
+| user_id (PK)   |<------| course_id (PK) |------>| material_id(PK)|
+| username       |       | title          |       | title          |
+| email          |       | description    |       | type           |
+| password_hash  |       | created_at     |       | file_path      |
+| role_id (FK)   |       | updated_at     |       | course_id (FK) |
+| created_at     |       +----------------+       +----------------+
+| updated_at     |
++----------------+
+       |
+       |       +----------------+       +----------------+
+       |       |    Lessons     |       |    Exercises   |
+       |       |----------------|       |----------------|
+       +------>| lesson_id (PK) |<------| exercise_id(PK)|
+               | title          |       | title          |
+               | description    |       | description    |
+               | course_id (FK) |       | lesson_id (FK) |
+               | created_at     |       | created_at     |
+               | updated_at     |       | updated_at     |
+               +----------------+       +----------------+
+                       |
+                       |       +----------------+
+                       |       |    Progress    |
+                       |       |----------------|
+                       +------>| progress_id(PK)|
+                               | user_id (FK)   |
+                               | lesson_id (FK) |
+                               | status         |
+                               | completed_at   |
+                               | created_at     |
+                               | updated_at     |
+                               +----------------+
+
+
+
+
+
+Users → Roles:
+
+Каждый пользователь имеет одну роль (администратор, преподаватель, студент).
+
+Связь: Users.role_id → Roles.role_id.
+
+
+
+
+Courses → Materials:
+
+Каждый курс может содержать несколько учебных материалов.
+
+Связь: Courses.course_id → Materials.course_id.
+
+
+
+
+
+Courses → Lessons:
+
+Каждый курс состоит из нескольких уроков.
+
+Связь: Courses.course_id → Lessons.course_id.
+
+
+
+
+Lessons → Exercises:
+
+Каждый урок может содержать несколько упражнений.
+
+Связь: Lessons.lesson_id → Exercises.lesson_id.
+
+
+
+
+
+Users → Progress:
+
+Прогресс студента по урокам и курсам.
+
+Связь: Users.user_id → Progress.user_id.
+
+
+
+
+
+Lessons → Progress:
+
+Прогресс студента по конкретному уроку.
+
+Связь: Lessons.lesson_id → Progress.lesson_id
