@@ -233,6 +233,7 @@ const File = require("./models/File");
 const passport =require('passport')
 const PORT = 4000;
 const app = express();
+const User=require('./auth/models/User')
 
 // Middleware
 app.use(cors());
@@ -241,6 +242,20 @@ app.use(express.json({ limit: "200mb" })); // Увеличиваем лимит 
 app.use(express.urlencoded({ extended: true, limit: "900mb" })); // Увеличиваем лимит для URL-encoded данных 900mb
 
 app.use(passport.initialize());
+
+
+app.get('/', async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ['id', 'name', 'email'], // Выбираем нужные поля
+    });
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Failed to fetch users', error: error.message });
+  }
+});
+
 
 // Роутеры
 const courseRouter = require('./routes/coursesRouter');

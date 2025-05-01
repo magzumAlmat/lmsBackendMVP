@@ -32,7 +32,7 @@ module.exports = {
         allowNull: true,
       },
       status: {
-        type: Sequelize.ENUM('created', 'submitted', 'graded'),
+        type: Sequelize.TEXT,
         allowNull: false,
         defaultValue: 'created',
       },

@@ -31,9 +31,9 @@ const Homework = sequelize.define('Homework', {
     allowNull: true,
   },
   status: {
-    type: DataTypes.ENUM('created', 'submitted', 'graded'),
+    type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'created',
+    defaultValue: 'not_checked',
   },
   grade: {
     type: DataTypes.INTEGER,
