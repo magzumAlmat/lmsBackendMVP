@@ -38,6 +38,10 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      jwt_token: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
       googleId: {
         type: DataTypes.STRING,
         allowNull: true,

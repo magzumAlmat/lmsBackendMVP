@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
-
+const fs = require('fs').promises;
 // Импортируем модели
 const Course = require('./Courses');
 const Lesson = require('./Lessons');
@@ -8,6 +8,7 @@ const Material = require('./Materials');
 const File = require('./File');
 const Homework = require('./HomeWorks');
 const User = require('../auth/models/User'); // Путь к User соответствует вашему проекту
+const UserDevices=require('./UserDevices')
 
 // Объект для хранения моделей
 const models = {
@@ -17,7 +18,12 @@ const models = {
   File,
   Homework,
   User,
+  UserDevices,
 };
+
+
+
+
 
 // Регистрируем ассоциации
 Object.values(models).forEach((model) => {

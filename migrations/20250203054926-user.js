@@ -41,6 +41,10 @@ module.exports = {
         allowNull: true
       },
 
+      jwt_token:{
+        type: Sequelize.TEXT,
+      allowNull: true,
+    },
       googleId: {
         type: Sequelize.STRING,
         allowNull: true,

@@ -7,7 +7,7 @@ const generateJWT = (user) => {
     roleId: user.roleId,
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); // Токен действителен 1 час
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' }); // Токен действителен 1 час
 };
 
 module.exports = { generateJWT };
