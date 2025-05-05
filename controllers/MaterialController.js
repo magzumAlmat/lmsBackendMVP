@@ -23,8 +23,58 @@ require('dotenv').config();
 //   }
 // };
 
+// exports.createMaterial = async (req, res) => {
+//   console.log('1 Create material req.body= ',req.body)
+//   try {
+//     const { title, type, file_path, lesson_id } = req.body;
+
+//     // Проверяем, что все обязательные поля присутствуют
+//     if (!title || !type || !file_path || !lesson_id) {
+//       return res.status(400).json({
+//         message: "Missing required fields. Please provide 'title', 'type', 'file_path', and 'lesson_id'.",
+//       });
+//     }
+    
+//     let finalFilePath;
+//     if (type === 'test' || type === 'opros') {
+//       // Для тестов и опросов сохраняем только ссылку без префикса
+//       finalFilePath = file_path;
+
+//     } 
+    
+//     else {
+//       // Для других типов добавляем префикс "http://localhost:4000/"
+//       finalFilePath = `${process.env.BACKEND_URL}/${file_path}`;
+//     }
+
+
+
+//     // Создаем новый материал в базе данных
+//     const newMaterial = await Material.create({
+//       title:title,
+//       type:type,
+//       file_path: finalFilePath,
+//       lesson_id:lesson_id,
+//     });
+
+//     // Возвращаем успешный ответ с созданным материалом
+//     res.status(201).json({
+//       message: "Material created successfully!",
+//       material: newMaterial,
+//     });
+//   } catch (error) {
+//     console.error("Error creating material:", error);
+
+//     // Обрабатываем ошибку и возвращаем сообщение об ошибке
+//     res.status(500).json({
+//       message: "An error occurred while creating the material.",
+//       error: error.message,
+//     });
+//   }
+// };
+
 exports.createMaterial = async (req, res) => {
-  console.log('1 Create material req.body= ',req.body)
+  console.log('1 Create material req.body= ', req.body);
   try {
     const { title, type, file_path, lesson_id } = req.body;
 
@@ -36,25 +86,20 @@ exports.createMaterial = async (req, res) => {
     }
     
     let finalFilePath;
-    if (type === 'test' || type === 'opros') {
-      // Для тестов и опросов сохраняем только ссылку без префикса
+    if (type === 'test' || type === 'opros' || type === 'youtube') {
+      // Для тестов, опросов и YouTube сохраняем только ссылку без префикса
       finalFilePath = file_path;
-
-    } 
-    
-    else {
-      // Для других типов добавляем префикс "http://localhost:4000/"
+    } else {
+      // Для других типов добавляем префикс из переменной окружения
       finalFilePath = `${process.env.BACKEND_URL}/${file_path}`;
     }
 
-
-
     // Создаем новый материал в базе данных
     const newMaterial = await Material.create({
-      title:title,
-      type:type,
+      title: title,
+      type: type,
       file_path: finalFilePath,
-      lesson_id:lesson_id,
+      lesson_id: lesson_id,
     });
 
     // Возвращаем успешный ответ с созданным материалом
@@ -72,6 +117,8 @@ exports.createMaterial = async (req, res) => {
     });
   }
 };
+
+
 // Получить все материалы
 exports.getAllMaterials = async (req, res) => {
   try {
