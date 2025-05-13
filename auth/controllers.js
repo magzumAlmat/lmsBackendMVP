@@ -149,6 +149,8 @@ const getAllUsers = async (req, res) => {
       ],
     });
 
+    console.log('allusers= ',users)
+    
     if (!users || users.length === 0) {
       return res.status(404).json({ message: 'Пользователи не найдены' });
     }
@@ -157,6 +159,7 @@ const getAllUsers = async (req, res) => {
       message: 'Список пользователей успешно получен',
       users,
     });
+    
   } catch (error) {
     console.error('Ошибка при получении пользователей:', error);
     return res.status(500).json({ message: 'Внутренняя ошибка сервера' });

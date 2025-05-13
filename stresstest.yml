@@ -1,0 +1,68 @@
+# config:
+#   target: "http://localhost:4000/api"
+#   phases:
+#     - duration: 60
+#       arrivalRate: 10
+#       rampTo: 50
+#       name: "Warm up phase"
+#     - duration: 120
+#       arrivalRate: 200
+#       name: "Sustained load phase"
+#     - duration: 30
+#       arrivalRate: 50
+#       name: "Cooldown phase"
+#   plugins:
+#     metrics-by-endpoint: {}
+#   variables:
+#     email: "vlesyonarosla1990@inbox.ru"
+#     password: "1"
+# scenarios:
+#   - name: "Login and access courses"
+#     flow:
+#       - post:
+#           url: "/auth/login"
+#           json:
+#             email: "{{ email }}"
+#             password: "{{ password }}"
+#           capture:
+#             json: "$.token"
+#             as: "authToken"
+#       - get:
+#           url: "/courses"
+#           headers:
+#             Authorization: "Bearer {{ authToken }}"
+config:
+  target: "http://localhost:4000/api"
+  http:
+    timeout: 15 # Таймаут 10 секунд для запросов
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 50
+      name: "Warm up phase"
+    - duration: 120
+      arrivalRate: 200
+      name: "Sustained load phase"
+    - duration: 30
+      arrivalRate: 50
+      name: "Cooldown phase"
+  plugins:
+    metrics-by-endpoint: {}
+  variables:
+    email: "vlesyonarosla1990@inbox.ru"
+    password: "1"
+scenarios:
+  - name: "Login and access courses"
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            json: "$.token" # Измените на $.accessToken, если нужно
+            as: "authToken"
+      - get:
+          url: "/courses/1"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
