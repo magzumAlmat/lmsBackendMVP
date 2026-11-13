@@ -19,9 +19,9 @@ module.exports = {
     const studentRole = roles.find((role) => role.name === 'student');
 
     // Хешируем пароли для пользователей
-    const hashedPasswordAdmin = await bcrypt.hash('1', 10);
-    const hashedPasswordTeacher = await bcrypt.hash('1', 10);
-    const hashedPasswordStudent = await bcrypt.hash('1', 10);
+    const hashedPasswordAdmin = await bcrypt.hash('pI6BbTgi3caSIVY', 10);
+    const hashedPasswordTeacher = await bcrypt.hash('0H?~FiXljTiJZ@1', 10);
+    const hashedPasswordStudent = await bcrypt.hash('Cm6#xcjFc97aP74', 10);
 
     // Создаем пользователей с привязкой к ролям
     await User.bulkCreate([

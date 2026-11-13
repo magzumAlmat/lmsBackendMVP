@@ -14,8 +14,8 @@ if (cluster.isMaster) {
   // Master process
   const numCPUs = os.cpus().length; // Get number of CPU cores
 
-  console.log(`Master process ${process.pid} is running`);
-  console.log(`Forking ${numCPUs} workers`);
+  console.log(`Мастер процесс id= ${process.pid} Работает`);
+  console.log(`Количество воркеров  ${numCPUs} `);
 
   // Fork workers
   for (let i = 0; i < numCPUs; i++) {
