@@ -1,29 +1,32 @@
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 // Создаем транспорт для отправки писем через Gmail SMTP
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'almat.magzum@gmail.com', // Замените на свой адрес электронной почты Gmail
-    pass: 'wxhprftlxvgljeyn' // Замените на свой пароль от электронной почты Gmail
-  }
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
 });
 
-function sendEmail(to,subject,text) {
-    const mailOptions = {
-      from: 'almat.magzum@gmail.com', 
-      to: to, 
-      subject: subject,
-      html:text,
-    };
+function sendEmail(to, subject, text) {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: to,
+    subject: subject,
+    html: text,
+  };
+
   // Отправляем письмо
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-    } else {
+  return transporter.sendMail(mailOptions)
+    .then((info) => {
       console.log('Email отправлен: ' + info.response);
-    }
-  });
+    })
+    .catch((error) => {
+      console.error('Ошибка при отправке email:', error.message);
+      throw error;
+    });
 }
 
-module.exports=sendEmail;
+module.exports = sendEmail;

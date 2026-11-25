@@ -385,16 +385,36 @@ const aUTH = async (req, res) => {
     await user.update({ jwt_token: token });
 
 
-    const verificationLink = `${process.env.VERIFY_URL}/api/auth/verifylink/${user.id}`;
     await sendEmail(
       user.email,
-      'Подтверждение регистрации',
-      `<div style="font-family: Arial, sans-serif; padding: 20px;">
-      <h2 style="color: #1976d2;">Подтверждение регистрации</h2>
-      <p>Спасибо за регистрацию! Для подтверждения вашего email перейдите по ссылке ниже:</p>
-      <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #1976d2; color: white; text-decoration: none; border-radius: 5px;">Подтвердить email</a>
-      <p style="color: #555;">Если вы не регистрировались, проигнорируйте это письмо.</p>
-    </div>`
+      'Регистрация на платформе buildingSmart Kazakhstan',
+      `<div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, #1565c0, #1976d2); padding: 30px 40px; text-align: center;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">buildingSmart Kazakhstan</h1>
+          <p style="color: rgba(255,255,255,0.85); margin: 8px 0 0; font-size: 14px;">Образовательная платформа</p>
+        </div>
+        <div style="padding: 35px 40px;">
+          <h2 style="color: #1b5e20; margin: 0 0 20px; font-size: 22px;">✅ Вы успешно зарегистрированы!</h2>
+          <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 25px;">
+            Спасибо за регистрацию на образовательной платформе buildingSmart Kazakhstan.
+          </p>
+          <div style="background-color: #f5f7fa; border-left: 4px solid #1976d2; border-radius: 8px; padding: 20px 24px; margin: 0 0 25px;">
+            <p style="color: #555; font-size: 13px; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Ваши данные для входа:</p>
+            <p style="color: #333; font-size: 15px; margin: 0 0 8px;"><strong>Логин:</strong> ${email}</p>
+            <p style="color: #333; font-size: 15px; margin: 0;"><strong>Пароль:</strong> ${password}</p>
+          </div>
+          <p style="color: #555; font-size: 15px; line-height: 1.6; margin: 0 0 25px;">
+            В ближайшее время вам будет открыт доступ для прохождения курсов. Ожидайте уведомления.
+          </p>
+          <div style="text-align: center; margin: 30px 0 10px;">
+            <a href="https://lms.kazniisa.kz/login" style="display: inline-block; padding: 14px 36px; background-color: #1976d2; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600; letter-spacing: 0.3px;">Войти на платформу</a>
+          </div>
+        </div>
+        <div style="background-color: #f5f7fa; padding: 20px 40px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="color: #999; font-size: 12px; margin: 0;">Если вы не регистрировались на платформе, проигнорируйте это письмо.</p>
+          <p style="color: #bbb; font-size: 11px; margin: 8px 0 0;">© ${new Date().getFullYear()} buildingSmart Kazakhstan. Все права защищены.</p>
+        </div>
+      </div>`
     );
 
     res.status(201).json({ message: 'Пользователь зарегистрирован. Проверьте email для подтверждения.' });
